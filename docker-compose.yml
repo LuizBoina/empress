@@ -7,14 +7,14 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGODB_ADMINUSERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_ADMINPASSWORD}
-      #MONGO_INITDB_DATABASE: empress
+      MONGO_INITDB_DATABASE: empress
     ports:
       - "27017:27017"
     volumes:
       - ./data/db:/data/db
     env_file: .env
-    #command: mongod --repair
-    #add --bind_ip = <ip> in "/data/config/mongod.conf" to accept connections
+    command: mongod --bind_ip 127.0.0.1,172.18.0.2
+    #add bind_ip = <ip> in "/data/config/mongod.conf" to accept connections
   app:
     build: .
     environment:

@@ -1,11 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const graphqlHTTP = require("express-graphql");
+const graphqlHttp = require("express-graphql");
 const mongoose = require('mongoose');
-/*
 const graphQlSchema = require('./graphql/schema/index');
 const graphQlResolvers = require('./graphql/resolvers/index');
-*/
 //const isAuth = require('./middleware/is-auth');
 
 const app = express();
@@ -21,20 +19,15 @@ app.use((req, res, next) => {
 });
 //app.use(isAuth);
 
-app.get('/', function (req, res) {
-  res.send('Hello World! Docker vai se fuder! é isso ms '+process.env.MONGO_DBNAME);
-});
-
-/*
+//to make requests http://localhost:8000/graphql
 app.use(
   '/graphql',
-  graphqlHttp({
+    graphqlHttp({
     schema: graphQlSchema,
     rootValue: graphQlResolvers,
     graphiql: true
   })
 );
-*/
 
 mongoose
   .connect('mongodb://mongo:27017', {

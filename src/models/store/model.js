@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const storeSchema = new Schema({
+    storeAdmin: { type: Schema.ObjectId, ref: 'User' },
     code : { type: Number, required: true },
     cnpj: { type:String, match: /^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$/ },
     latLng : {
@@ -13,12 +14,12 @@ const storeSchema = new Schema({
         price: { type: Number, required: true, unique: true }
     },
     query: [{ type: Schema.ObjectId, ref: 'Print' }],
-    fineshedPrints: [{
+    finishedPrints: [{
         print: { type: Schema.ObjectId, ref: 'Print' },
         printTime: { type: Date, default: Date.now }
     }],
     acceptPicPay: { type: Boolean, default: false },
-    picPayaccount: { type: String },
+    picPayAccount: { type: String },
     printNumber: { type: Number },
     Earning: { type: Number }
 

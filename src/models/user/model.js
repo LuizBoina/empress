@@ -7,13 +7,14 @@ const userRoles = ['admin', 'employee', 'costumer'];
 const userSchema = new Schema({
     email: { type: String, match: /^\S+@\S+\.\S+$/, required: true, unique: true, trim: true, lowercase: true },
     name: { type: String, required: true },
-    phone_number: { type: String, unique: true }, //must be required for costumer
+    phoneNumber: { type: String, unique: true }, //must be required for costumer
     password: { type: String, required: true, minlength: 6 },
-    role: { type: String, enum: userRoles, default: 'costumer' },
+    role: { type: String, enum: userRoles, default: 'costumer', required: true },
     //for employee
     store: { type: Schema.Types.ObjectId, ref: 'Store' },
     //for costumer
-    //maybe only PicPay account
+    photo: { type: String/*Schema.Types.Mixed*/ }
+    //maybe only PicPay account maybe link for payment is better
 
 });
 
@@ -24,9 +25,10 @@ userSchema.path('email').set(function(email) {
 });
 
 userSchema.pre('save', function(next) {
-  if (!this.isModified('password')) {
+    console.log('this.isModified(\'password\'-) ' + this.isModified('password'));
+    /*if (!this.isModified('password')) {
     return next();
-  }
+  }*/
 
   bcrypt.hash(this.password, 9).then((hash) => {
     this.password = hash;
