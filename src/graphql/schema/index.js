@@ -1,4 +1,4 @@
-    const { buildSchema } = require('graphql');
+const {buildSchema} = require('graphql');
 
 module.exports = buildSchema(`
     type Print {
@@ -101,10 +101,11 @@ module.exports = buildSchema(`
     
     type RootQuery {
         stores: [Store!]
+        store(latLng: LatLng!): Store
         prints: [Print!]
         finishedPrints: [FinishedPrint!]
         login(userName: String!, password: String!): AuthData!
-        users: [User!]
+        logout(id: String!, token:String!)
     }
     
     type RootMutation {

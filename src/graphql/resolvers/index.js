@@ -1,10 +1,10 @@
 const userResolver = require('../resolvers/user');
-/*const Resolver = require('');
-const Resolver = require('');*/
+const storeResolver = require('../resolvers/store');
+/*const Resolver = require('');*/
 
 const rootResolver = {
     ...userResolver,
-
+    ...storeResolver,
 };
 
 module.exports = rootResolver;

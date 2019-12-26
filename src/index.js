@@ -9,38 +9,38 @@ const graphQlResolvers = require('./graphql/resolvers/index');
 const app = express();
 app.use(bodyParser.json());
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST,GET,OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  if (req.method === 'OPTIONS') {
-    return res.sendStatus(200);
-  }
-  next();
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST,GET,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    if (req.method === 'OPTIONS') {
+        return res.sendStatus(200);
+    }
+    next();
 });
 //app.use(isAuth);
 
 //to make requests http://localhost:8000/graphql
 app.use(
-  '/graphql',
+    '/graphql',
     graphqlHttp({
-    schema: graphQlSchema,
-    rootValue: graphQlResolvers,
-    graphiql: true
-  })
+        schema: graphQlSchema,
+        rootValue: graphQlResolvers,
+        graphiql: true
+    })
 );
 
 mongoose
-  .connect('mongodb://mongo:27017', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    //user: "empressAdmin",//process.env.MONGO_USER,
-    //pass: "AHrPvwX?6%mY$z@'",//process.env.MONGO_PASSWORD,
-    dbName: "empress"//process.env.MONGO_DBNAME,
-    //ssl: true
+    .connect('mongodb://mongo:27017', {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        //user: "empressAdmin",//process.env.MONGO_USER,
+        //pass: "AHrPvwX?6%mY$z@'",//process.env.MONGO_PASSWORD,
+        dbName: "empress"//process.env.MONGO_DBNAME,
+        //ssl: true
     })
-  .then(() => {
-    app.listen(8000);
-  })
-  .catch(err => {
-    console.log(err);
-  });
+    .then(() => {
+        app.listen(8000);
+    })
+    .catch(err => {
+        console.log(err);
+    });
