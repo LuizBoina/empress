@@ -8,7 +8,7 @@ const printSchema = new Schema({
     orderTime: {type: Date, default: Date.now},
     total: {type: Number, required: true},
     file: {type: String/*Schema.Types.Mixed*/, required: true},
-    alreadyPayied: {type: Boolean, required: true}, //that means payment realized with PicPay
+    alreadyPayied: {type: Boolean, required: true}
 });
 
 module.exports = mongoose.model('Print', printSchema);
