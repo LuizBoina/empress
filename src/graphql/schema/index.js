@@ -25,6 +25,7 @@ module.exports = buildSchema(`
     
     type AuthData {
         userId: ID!
+        role: String!
         token: String!
         tokenExpiration: Int!
     }
@@ -81,7 +82,6 @@ module.exports = buildSchema(`
     }
     
     input StoreInput {
-        storeAdmin: UserInput!
         code: Int!
         cnpj: String
         latLng: LatLngInput!
@@ -101,11 +101,11 @@ module.exports = buildSchema(`
     
     type RootQuery {
         stores: [Store!]
-        store(latLng: LatLng!): Store
+        store(latLngInput: LatLngInput!): Store
         prints: [Print!]
         finishedPrints: [FinishedPrint!]
         login(userName: String!, password: String!): AuthData!
-        logout(id: String!, token:String!)
+        logout(id: String!, token:String!): Boolean
     }
     
     type RootMutation {

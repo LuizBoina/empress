@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const storeSchema = new Schema({
     storeAdmin: {type: Schema.ObjectId, ref: 'User'},
     code: {type: Number, required: true},
-    cnpj: {type: String, match: /^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$/},
+    cnpj: {type: String},
     latLng: {
         lat: {type: String, required: true},
         lng: {type: String, required: true}

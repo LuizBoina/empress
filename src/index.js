@@ -4,7 +4,7 @@ const graphqlHttp = require("express-graphql");
 const mongoose = require('mongoose');
 const graphQlSchema = require('./graphql/schema/index');
 const graphQlResolvers = require('./graphql/resolvers/index');
-//const isAuth = require('./middleware/is-auth');
+const isAuth = require('./middleware/auth');
 
 const app = express();
 app.use(bodyParser.json());
@@ -17,7 +17,8 @@ app.use((req, res, next) => {
     }
     next();
 });
-//app.use(isAuth);
+
+app.use(isAuth);
 
 //to make requests http://localhost:8000/graphql
 app.use(
@@ -25,7 +26,10 @@ app.use(
     graphqlHttp({
         schema: graphQlSchema,
         rootValue: graphQlResolvers,
-        graphiql: true
+        graphiql: true,
+        /*customFormatErrorFno: (err) => {
+            return ({ message: err.message, statusCode: err.statusCode });
+        }*/
     })
 );
 

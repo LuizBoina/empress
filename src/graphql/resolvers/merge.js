@@ -43,11 +43,11 @@ const fPrintLoader = new DataLoader(fPrintIds => {
 const fPrints = async fPrintIds => {
     try {
         const fPrints = await Print.find({_id: {$in: fPrintIds}});
-        fPrints.sort((a,b) => {
+        fPrints.sort((a, b) => {
             return a._doc.printTime > b._doc.printTime ? 1 : a._doc.printTime < b._doc.printTime ? -1 : 0;
         });
         return fPrints.map(fPrint => {
-           return transformFPrint(fPrint);
+            return transformFPrint(fPrint);
         });
     } catch (err) {
         throw err;
@@ -69,7 +69,7 @@ const transformFPrint = fPrint => {
 };
 
 const userLoader = new DataLoader(userIds => {
-    return User.find({ _id: {$in: userIds}});
+    return User.find({_id: {$in: userIds}});
 });
 
 const user = async userId => {
@@ -91,8 +91,7 @@ const storeLoader = storeIds => {
 
 const store = async storeId => {
     try {
-        const store = await storeLoader.load(storeId.toString());
-        return store;
+        return await storeLoader.load(storeId.toString());
     } catch (err) {
         throw err;
     }
@@ -124,3 +123,7 @@ const transformStore = store => {
         throw err;
     }
 };
+
+exports.transformStore = transformStore;
+exports.transformPrint = transformPrint;
+exports.transformFPrint = transformFPrint;
