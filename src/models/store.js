@@ -22,7 +22,7 @@ const storeSchema = new Schema({
     picPayAccount: {type: String},
     printNumber: {type: Number},
     Earning: {type: Number},
-    mouthlyAcess: {type: Number}
+    monthlyAccess: {type: Number}
 
 }, {
     timestamp: true

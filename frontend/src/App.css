@@ -119,8 +119,11 @@ label {
     outline: none !important;
 }
 
-/******  HEADER  ******/
+/******  INITIAL  ******/
 
+.initial h1{
+    margin: 113px;
+}
 /******  ADMIN  ******/
 
 /******  ADMIN  ******/

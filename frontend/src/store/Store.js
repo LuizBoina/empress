@@ -1,10 +1,41 @@
-import React from "react";
+import React from 'react'
 import {AuthContext} from "../App";
-
+const initialState = {
+    storeId: null,
+};
 export const Store = () => {
-    const {dispatch} = React.useContext(AuthContext);
+    const {state, dispatch} = React.useContext(AuthContext);
     return (
-        <h1>Employee logged in!</h1>
+        /*{state.role === "admin" &&*/ (
+        <table>
+            <thead>
+            <tr>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {props.stores.length > 0 ? (
+                props.stores.map(store => (
+                    <tr key={store.id}>
+                        <td>{store.code}</td>
+                        <td>{store.storeAdmin.name}</td>
+                        <td>
+                            <button className="button muted-button">Edit</button>
+                            <button className="button muted-button">Delete</button>
+                        </td>
+                    </tr>
+                ))
+            ) : (
+                <tr>
+                    <td colSpan={3}>No users</td>
+                </tr>
+            )}
+            </tbody>
+        </table>
+    )/*}*/
     );
 };
+
 export default Store;
