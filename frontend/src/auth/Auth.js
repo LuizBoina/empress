@@ -16,7 +16,7 @@ export const Auth = () => {
             [event.target.name]: event.target.value
         });
     };
-    const handleFormSubmit = event => {
+    const handleFormSubmit = async event => {
         event.preventDefault();
         setData({
             ...data,
@@ -45,34 +45,23 @@ export const Auth = () => {
                 password: data.password
             },
         };
-        fetch('http://localhost:8000/graphql', {
+        const res = await (await fetch('http://localhost:8000/graphql', {
             method: 'POST',
             body: JSON.stringify(requestBody),
             headers: {
                 'Content-Type': 'application/json'
             }
-        })
-            .then(res => {
-                if (res.ok) {
-                    return res.json();
-                }
-                throw res;
-            })
-            .then(resJson => {
-                dispatch({
-                    type: "LOGIN",
-                    payload: resJson
-                })
-            })
-            .catch(error => {
-                error.json().then(err => {
-                    console.log('err', err);
-                    setData({
-                        ...data,
-                        isSubmitting: false,
-                        errorMessage: err.errors[0].message || err.statusText
-                    });
-                });
+        })).json();
+        if (res.data)
+            dispatch({
+                type: "LOGIN",
+                payload: res
+            });
+        else
+            setData({
+                ...data,
+                isSubmitting: false,
+                errorMessage: res.errors[0].message || res.statusText
             });
     };
     return (

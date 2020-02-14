@@ -19,7 +19,6 @@ module.exports = buildSchema(`
         phoneNumber: String
         password: String!
         role: String!
-        store: Store
         photo: String
     }
     
@@ -43,6 +42,8 @@ module.exports = buildSchema(`
         picPayAccount: String
         printNumber: Int!
         Earning: Float!
+        createdAt: String
+        updateAt: String
     }
     
     type FinishedPrint {
@@ -77,12 +78,12 @@ module.exports = buildSchema(`
         phoneNumber: String
         password: String!
         role: String!
-        store: StoreInput
         photo: String
     }
     
     input StoreInput {
-        code: Int!
+        storeAdmin: String!
+        code: Int
         cnpj: String
         latLng: LatLngInput!
         acceptPicPay: Boolean!
@@ -110,6 +111,7 @@ module.exports = buildSchema(`
     
     type RootMutation {
         createUser(userInput: UserInput): User
+        deleteUser(userId: String!): String
         createStore(storeInput: StoreInput): Store
         createOption(optionInput: OptionInput): Option
         createPrint(printInput: PrintInput): Print

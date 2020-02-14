@@ -27,48 +27,48 @@ export const Header = () => {
     const {page, setPage} = React.useContext(PageContext);
     return (
         <PageContext.Provider value={{page, setPage}}>
-        <nav id="navigation">
-            <h1 className="logo">
-                Empress
-            </h1>
-            {state.isAuthenticated && state.role === "admin" &&
-            <div>
+            <nav id="navigation">
+                <h1 className="logo">
+                    Empress
+                </h1>
+                {state.isAuthenticated && state.role === "admin" &&
+                <div>
+                    <button
+                        onClick={() => setPage('ADD_STORE')}>
+                        <h1 className="logo">Criar nova loja</h1>
+                    </button>
+                    <button
+                        onClick={() => setPage('VIEW_STORE')}>
+                        <h1 className="logo">Ver lojas</h1>
+                    </button>
+                </div>
+                }
+                {state.isAuthenticated && state.role === "employee" &&
+                <div>
+                    <button
+                        onClick={() => setPage('PRINTS')}>
+                        <h1 className="logo">Impressões pendentes</h1>
+                    </button>
+                    <button
+                        onClick={() => setPage('F_PRINTS')}>
+                        <h1 className="logo">Impressões feitas</h1>
+                    </button>
+                    <button
+                        onClick={() => setPage('INFO')}>
+                        <h1 className="logo">Estatísticas</h1>
+                    </button>
+                </div>
+                }
                 <button
-                    onClick={() => setPage('ADD_STORE')}>
-                    <h1 className="logo"> Add stores</h1>
+                    onClick={() =>
+                        dispatch({
+                            type: "LOGOUT"
+                        })}>
+                    {state.isAuthenticated && (
+                        <h1>Hi {state.role} (LOGOUT)</h1>
+                    )}
                 </button>
-                <button
-                    onClick={() => setPage('VIEW_STORE')}>
-                    <h1 className="logo"> View stores</h1>
-                </button>
-            </div>
-            }
-            {state.isAuthenticated && state.role === "employee" &&
-            <div>
-                <button
-                    onClick={() => setPage('PRINTS')}>
-                    <h1 className="logo">Impressões pendentes</h1>
-                </button>
-                <button
-                    onClick={() => setPage('F_PRINTS')}>
-                    <h1 className="logo">Impressões feitas</h1>
-                </button>
-                <button
-                    onClick={() => setPage('INFO')}>
-                    <h1 className="logo">Estatísticas</h1>
-                </button>
-            </div>
-            }
-            <button
-                onClick={() =>
-                    dispatch({
-                        type: "LOGOUT"
-                    })}>
-                {state.isAuthenticated && (
-                    <h1>Hi {state.role} (LOGOUT)</h1>
-                )}
-            </button>
-        </nav>
+            </nav>
         </PageContext.Provider>
     );
 };

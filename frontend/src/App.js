@@ -1,5 +1,5 @@
 import React from 'react';
-import './App.css';
+import './css/App.css';
 import Auth from './auth/Auth';
 import Header from './header/Header';
 import Initial from "./initial/Initial";
@@ -8,6 +8,7 @@ import Print from "./print/print";
 import FPrint from "./print/fPrint";
 import Store from "./store/Store";
 import StoreInfo from "./store/StoreInfo";
+
 export const AuthContext = React.createContext(null);
 const initialState = {
     isAuthenticated: false,
@@ -56,7 +57,7 @@ const pageReducer = (state, action) => {
             if (role === 'admin')
                 return {
                     ...state,
-                    addStore: true,
+                    addStore: !state.addStore,
                     viewStore: false,
                     prints: false,
                     fPrints: false,
@@ -71,7 +72,7 @@ const pageReducer = (state, action) => {
                 return {
                     ...state,
                     addStore: false,
-                    viewStore: true,
+                    viewStore: !state.viewStore,
                     prints: false,
                     fPrints: false,
                     info: false,
@@ -86,7 +87,7 @@ const pageReducer = (state, action) => {
                     ...state,
                     addStore: false,
                     viewStore: false,
-                    prints: true,
+                    prints: !state.prints,
                     fPrints: false,
                     info: false,
                 };
@@ -101,7 +102,7 @@ const pageReducer = (state, action) => {
                     addStore: false,
                     viewStore: false,
                     prints: false,
-                    fPrints: true,
+                    fPrints: !state.fPrints,
                     info: false,
                 };
             else {
@@ -116,7 +117,7 @@ const pageReducer = (state, action) => {
                     viewStore: false,
                     prints: false,
                     fPrints: false,
-                    info: true,
+                    info: !state.info,
                 };
             else {
                 console.log("can't do this with current role");
@@ -157,8 +158,9 @@ export const App = () => {
         >
             <PageContext.Provider value={{page, setPage}}>
                 <Header/>
-                <div className='App'>{state.isAuthenticated ? <Initial/> : <Auth/>}</div>
-                <div className='App'>{page.addStore ? <CreateStore/> : page.viewStore ? <Store/> : page.prints ? <Print/> : page.fPrints ? <FPrint/> : page.info ? <StoreInfo/> : <Initial/>}</div>
+                <div className='App'>{!state.isAuthenticated ? <Auth/> : page.addStore ?
+                    <CreateStore/> : page.viewStore ? <Store/> : page.prints ? <Print/> : page.fPrints ?
+                        <FPrint/> : page.info ? <StoreInfo/> : <Initial/>}</div>
             </PageContext.Provider>
         </AuthContext.Provider>
 

@@ -11,25 +11,25 @@ const storeResolver = {
             throw err;
         }
     },
-    store: async (root, args, context) => {
+    store: async args => {
         try {
             const store = await Store.findOne({latLng: args.latLngInput});
-            return {
-                ...transformStore(store),
-                ...context
-            }
+            return transformStore(store);
         } catch (err) {
             throw err;
         }
     },
-    createStore: async (root, args, context) => {
+    createStore: async args => {
+        console.log('args ', args);
         try {
-            const result = Store.create(args.storeInput);
-            return {
-                ...result,
-                ...context
-            };
+            if(!/[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}\-?[0-9]{2}/g.test(args.storeInput.cnpj))
+                throw new Error('CNPJ inválido');
+            const stores = await Store.find();
+            args.storeInput.code = stores.length + 1;
+            const result = await Store.create(args.storeInput);
+            return {...result._doc, _id: result.id};
         } catch (err) {
+            console.log('err', err)
             throw err;
         }
     },

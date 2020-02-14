@@ -7,7 +7,7 @@ const userResolver = {
         try {
             if (/^[a-z0-9.]+@[a-z0-9]+\.[a-z]+\.([a-z]+)?$/i.test(args.userInput.email))
                 throw new Error('Email inválido');
-            else if (args.userInput.role === 'costumer' && (args.userInput.phoneNumber === "" || args.userInput.phoneNumber !== 11))
+            else if (args.userInput.role === 'costumer' && (args.userInput.phoneNumber === "" || args.userInput.phoneNumber.length !== 11))
                 throw new Error('Número de telefone inválido');
             else if (args.userInput.password.length < 6)
                 throw new Error('A senha deve ter pelo menos 6 dígitos');
@@ -26,6 +26,14 @@ const userResolver = {
                 const result = await User.create(args.userInput);
                 return {...result._doc, password: null, _id: result.id};
             }
+        } catch (err) {
+            throw err;
+        }
+    },
+    deleteUser: async args => {
+        try {
+            const res = await User.findByIdAndDelete(args.userId);
+            return "user deleted!";
         } catch (err) {
             throw err;
         }

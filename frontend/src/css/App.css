@@ -33,6 +33,10 @@ body {
     height: 100%;
 }
 
+.login-container .container label {
+    margin-bottom: 1%;
+}
+
 .login-container .container h1 {
     font-size: 2.5rem;
     align-self: center;
@@ -121,9 +125,49 @@ label {
 
 /******  INITIAL  ******/
 
-.initial h1{
+.initial {
     margin: 113px;
 }
-/******  ADMIN  ******/
 
-/******  ADMIN  ******/
+/******  INITIAL  ******/
+
+/******  CREATE_STORE  ******/
+
+.card-store {
+    /* Add shadows to create the "card" effect */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+    /*height: 100%;*/
+    width: 45%;
+    margin-left: 26.5%;
+    padding-bottom: 2%;
+}
+
+.card-store button {
+    margin-top: 1%;
+}
+
+/* On mouse-over, add a deeper shadow */
+.card-store:hover {
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.inline-label {
+    display: inline-block;
+}
+
+.lat {
+    float: left;
+}
+
+.lng {
+    float: right;
+}
+
+.PicPayAccount-label {
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 0s linear 0s, opacity 300ms;
+}
+
+/******  CREATE_STORE  ******/
