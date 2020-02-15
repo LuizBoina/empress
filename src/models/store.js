@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const storeSchema = new Schema({
+    isActivated: {type: Boolean, default: true},
     storeAdmin: {type: Schema.ObjectId, ref: 'User'},
     code: {type: Number, required: true},
     cnpj: {type: String},

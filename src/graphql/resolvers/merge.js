@@ -112,7 +112,7 @@ const transformStore = store => {
         return {
             ...store._doc,
             _id: store.id,
-            storeAdmin: user(store._doc.storeAdmin),
+            storeAdmin: user.bind(this, store._doc.storeAdmin),
             query: () => printLoader.loadMany(store._doc.query),
             finishedPrints: () => fPrintLoader.loadMany(store._doc.finishedPrints),
             createdAt: dateToString(store.createdAt),

@@ -1,5 +1,6 @@
 import React from "react";
 import {/*AuthContext,*/ PageContext} from "../App";
+
 export const CreateStore = () => {
     //const {dispatch} = React.useContext(AuthContext);
     const {setPage} = React.useContext(PageContext);
@@ -99,7 +100,7 @@ export const CreateStore = () => {
             } else {
                 const userDeleteRequestBody = {
                     query: `
-                        mutation DeleteUser($userId: String!) {
+                        mutation DeleteUser($userId: ID!) {
                             deleteUser(userId: $userId)
                         }
                     `,

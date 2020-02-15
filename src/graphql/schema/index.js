@@ -17,7 +17,7 @@ module.exports = buildSchema(`
         email: String!
         name: String!
         phoneNumber: String
-        password: String!
+        password: String
         role: String!
         photo: String
     }
@@ -44,6 +44,7 @@ module.exports = buildSchema(`
         Earning: Float!
         createdAt: String
         updateAt: String
+        isActivated: Boolean!
     }
     
     type FinishedPrint {
@@ -57,7 +58,6 @@ module.exports = buildSchema(`
     }
     
     type Option {
-        store: Store!
         name: String!
         price: Float!
     }
@@ -102,7 +102,7 @@ module.exports = buildSchema(`
     
     type RootQuery {
         stores: [Store!]
-        store(latLngInput: LatLngInput!): Store
+        store(id: ID!): Store
         prints: [Print!]
         finishedPrints: [FinishedPrint!]
         login(userName: String!, password: String!): AuthData!
@@ -111,10 +111,13 @@ module.exports = buildSchema(`
     
     type RootMutation {
         createUser(userInput: UserInput): User
-        deleteUser(userId: String!): String
+        updateUser(userId: ID!, userInput: UserInput): User
+        deleteUser(userId: ID!): String
         createStore(storeInput: StoreInput): Store
-        createOption(optionInput: OptionInput): Option
+        updateStore(userID: ID!, storeInput: StoreInput): Store
+        deleteStore(storeId: ID!): String
         createPrint(printInput: PrintInput): Print
+        deletePrint(printId: ID!): String
     }
     
     schema {

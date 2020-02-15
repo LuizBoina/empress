@@ -153,7 +153,7 @@ label {
 }
 
 .inline-label {
-    display: inline-block;
+    display: flow-root;
 }
 
 .lat {
