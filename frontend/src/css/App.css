@@ -50,13 +50,25 @@ body {
     align-self: center;
 }
 
-input[type="text"], input[type="password"] {
+input[type="text"], input[type="password"], input[type="number"] {
     padding-left: 1px;
     padding-right: 1px;
     height: 40px;
     border-radius: 5px;
     border: .5px solid rgb(143, 143, 143);
     font-size: 15px;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance:textfield;
 }
 
 label {
@@ -162,6 +174,7 @@ label {
 
 .lng {
     float: right;
+    /*width: 33%;*/
 }
 
 .PicPayAccount-label {
@@ -171,3 +184,50 @@ label {
 }
 
 /******  CREATE_STORE  ******/
+
+/******  STORE  ******/
+
+.store-update {
+    margin-bottom: 1%;
+}
+
+.store-update input {
+    margin-bottom: 1%;
+}
+
+.add-option {
+    background-image: url("../assets/plus.svg");
+    background-color: #ffff;
+    width: 3em;
+    height: 3em;
+	color: inherit;
+	border: none;
+	padding: 0;
+    margin: 0.5em 0 2em 1.2em;
+	/*font: inherit;*/
+	cursor: pointer;
+	/*outline: inherit;*/
+}
+
+.remove-option {
+    background-image: url("../assets/quit.svg");
+    background-color: #ffff;
+    width: 1.5em;
+    height: 1.5em;
+	color: inherit;
+	border: none;
+	padding: 0;
+	/*font: inherit;*/
+	cursor: pointer;
+    margin-top: 2em;
+	/*outline: inherit;*/
+}
+
+.stores-list {
+    text-align: center;
+}
+
+.col-5 h1 {
+    text-align-last: end;
+}
+/******  STORE  ******/

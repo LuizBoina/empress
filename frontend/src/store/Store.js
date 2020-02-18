@@ -3,9 +3,6 @@ import React, {useEffect} from 'react'
 import Spinner from '../components/spinner/Spinner';
 import Modal from "../components/modal/Modal";
 import '../css/bootstrap-grid.min.css';
-import jwt from 'json-web-token';
-import addSvg from '../assets/plus.svg';
-import removeSvg from '../assets/quit.svg';
 
 export const Store = () => {
     const initialState = {
@@ -32,8 +29,8 @@ export const Store = () => {
     const [data, setData] = React.useState(initialState);
     const [storeData, setStoreData] = React.useState(selectedStoreData);
     const handleInputChange = event => {
-        setData({
-            ...data,
+        setStoreData({
+            ...storeData,
             [event.target.name]: event.target.value,
         });
     };
@@ -76,8 +73,33 @@ export const Store = () => {
             isDelete: false
         });
     };
-    const setSelectedStore = async () => {
-
+    const handleAddOption = () => {
+        const options = [...storeData.options];
+        options.push({name: "", price: -1});
+        setStoreData({
+            ...storeData,
+            options: options
+        });
+    };
+    const handleChangeOption = (event, i) => {
+        console.log('event.target.value', event.target.value, 'event.target.name', event.target.name);
+        const options = [...storeData.options];
+        if(event.target.name === 'price')
+            options[i].price = event.target.value;
+        else
+            options[i].name = event.target.value;
+        setStoreData({
+            ...storeData,
+            options: options
+        });
+    };
+    const handleRemoveOptions = (i) => {
+        let options = [...storeData.options];
+        options.splice(i, 1);
+        setStoreData({
+            ...storeData,
+            options: options
+        });
     };
     const handleCancelUpdate = () => {
         setData({
@@ -93,16 +115,17 @@ export const Store = () => {
         });
         const userRequestBody = {
             query: `
-                mutation CreateUser($email: String!, $name: String!, $phoneNumber: String!, $password: String!, $role: String!) {
-                    createUser(userInput: {email: $email, name: $name, phoneNumber: $phoneNumber, password: $password, role: $role}) {
+                mutation UpdateUser($userId: ID!, $email: String!, $name: String!, $phoneNumber: String!, $password: String!, $role: String!) {
+                    updateUser(userId: $userId, userInput: {email: $email, name: $name, phoneNumber: $phoneNumber, password: $password, role: $role}) {
                         _id
                     }
                 }`,
             variables: {
-                email: data.email,
-                name: data.name,
-                phoneNumber: data.phoneNumber,
-                password: data.password,
+                userId: storeData.storeAdmin._id,
+                email: storeData.email,
+                name: storeData.name,
+                phoneNumber: storeData.phoneNumber,
+                password: storeData.password,
                 role: "employee",
             },
         };
@@ -113,20 +136,28 @@ export const Store = () => {
                 'Content-Type': 'application/json'
             }
         })).json();
-        if (resUser.data.createUser) {
+        if (resUser.data.updateUser) {
+            storeData.options.forEach( option => {
+                option.price = parseFloat(option.price)
+            });
             const storeRequestBody = {
                 query: `
-                    mutation CreateStore($storeAdmin: String!, $cnpj: String!, $latLng: LatLngInput!, $acceptPicPay: Boolean!, $picPayAccount: String) {
-                        createStore(storeInput: {storeAdmin: $storeAdmin, cnpj: $cnpj, latLng: $latLng, acceptPicPay: $acceptPicPay, picPayAccount: $picPayAccount}) {
+                    mutation UpdateStore($storeId: ID!, $storeAdmin: ID!, $cnpj: String!, $latLng: LatLngInput!, $acceptPicPay: Boolean!, $picPayAccount: String, $options: [OptionInput!]!) {
+                        updateStore(storeId: $storeId, storeInput: {storeAdmin: $storeAdmin, cnpj: $cnpj, latLng: $latLng, acceptPicPay: $acceptPicPay, picPayAccount: $picPayAccount, options: $options}) {
                             _id
+                            updateAt
+                            code
                         }
                     }`,
                 variables: {
-                    storeAdmin: resUser.data.createUser._id,
-                    cnpj: data.cnpj,
-                    latLng: {lat: data.lat, lng: data.lng},
-                    acceptPicPay: data.acceptPicPay,
-                    picPayAccount: data.acceptPicPay ? data.picPayAccount : null,
+                    storeId: data.selectedStore,
+                    storeAdmin: resUser.data.updateUser._id,
+                    cnpj: storeData.cnpj,
+                    latLng: {lat: storeData.lat, lng: storeData.lng},
+                    acceptPicPay: storeData.acceptPicPay,
+                    picPayAccount: storeData.acceptPicPay ? storeData.picPayAccount : null,
+                    options: storeData.options,
+                    isActivated: storeData.isActivated
                 },
             };
             const storeResponse = await (await fetch('http://localhost:8000/graphql', {
@@ -136,12 +167,38 @@ export const Store = () => {
                     'Content-Type': 'application/json'
                 }
             })).json();
-            console.log('response', storeResponse);
-            const selectedStoreIndex = data.stores.findIndex(store => store._id === data.selectedStore);
-            //data.stores[selectedStoreIndex] = response.;
-        } else {
-
-        }
+            console.log('response-handleStoreUpdate', storeResponse);
+            console.log('stores', data.stores);
+            if(storeResponse.data.updateStore) {
+                const selectedStoreIndex = data.stores.findIndex(store => store._id === data.selectedStore);
+                console.log('selectedStoreIndex', selectedStoreIndex)
+                const stores = data.stores;
+                console.log('stores', stores)
+                stores[selectedStoreIndex] = {
+                            _id: data.selectedStore,
+                            code: storeResponse.data.updateStore.code,
+                            updateAt: Date.now(),
+                            isActivated: storeData.isActivated,
+                            storeAdmin: {
+                                _id: storeData.storeAdmin._id,
+                                name: storeData.storeAdmin.name
+                            }
+                };
+                setData({
+                    ...data,
+                    stores: stores
+                });
+            }
+            else
+                setData({
+                   ...data,
+                   errorMessage: 'nao foi possivel atualizar loja'
+                });
+        } else
+            setData({
+                ...data,
+                errorMessage: 'nao foi poosivel atualizar usuario'
+            });
         setData({
             ...data,
             isLoading: false,
@@ -178,13 +235,13 @@ export const Store = () => {
                         'Content-Type': 'application/json'
                     }
                 })).json();
-                console.log('resStores', response);
                 setData({
                     ...data,
                     stores: response.errors ? [] : response.data.stores.sort((a, b) =>
                         a.isActivated && b.isActivated && a.updateAt >= b.updateAt ? 1 : a.isActivated ? 1 : -1),
                     isLoading: false
                 });
+                    console.log('response-StoresFetch', response);
             }
 
             storesFetch();
@@ -234,7 +291,7 @@ export const Store = () => {
                             'Content-Type': 'application/json'
                         }
                     })).json();
-                    console.log('response.data.store.storeAdmin.password', response.data.store.storeAdmin.password)
+                    console.log('response', response);
                     if(!response.errors)
                         setStoreData({
                             storeAdmin: response.data.store.storeAdmin,
@@ -270,16 +327,16 @@ export const Store = () => {
                             <th>Ações</th>
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody className="stores-list">
                         {data.stores.map(store => (
                             <tr key={store.id}>
-                                <td>{store.code}</td>
-                                <td>{store.isActivated? "Ativa" : "Inativa"}</td>
-                                <td>{store.storeAdmin.name}</td>
-                                <td>
-                                    <button onClick={() => setData({...data, selectedStore: store._id})}>Editar
+                                <td key={store.code}>{store.code}</td>
+                                <td key={`${store.id}-bool`}>{store.isActivated? "Ativa" : "Inativa"}</td>
+                                <td key={store.storeAdmin.name}>{store.storeAdmin.name}</td>
+                                <td key={`${store.id}-options`}>
+                                    <button key={`${store.id}-options-1`} onClick={() => setData({...data, selectedStore: store._id})}>Editar
                                     </button>
-                                    <button onClick={() => setData({
+                                    <button key={`${store.id}-options-2`} onClick={() => setData({
                                         ...data,
                                         selectedStore: store._id,
                                         isDelete: true
@@ -306,7 +363,7 @@ export const Store = () => {
                         //**********************************   STORAGE UPDATE ***************************************//
                         <div className="col-7">
                             <div className="container">
-                                <form onSubmit={handleStoreUpdate}>
+                                <form  className="store-update" onSubmit={handleStoreUpdate}>
                                     <h1>Editar Loja</h1>
 
                                     <label htmlFor="email">
@@ -376,36 +433,45 @@ export const Store = () => {
                                         </div>
                                     </label>
                                     <br/>
-
                                     <label htmlFor="options">
                                         <div className="container">
-                                        Opções de impressão
-                                        {storeData.options.map( (option, i) =>
-                                        <div className="row">
-                                            <div className="col-6">
+                                        Opções de impressão<br/><br/>
+                                        {storeData.options.map( (option, i) => (
+                                        <div className="row store-update">
+                                            <div className="col-5">
                                                 Nome
                                                 <input
                                                     type="text"
                                                     value={storeData.options[i].name}
-                                                    onChange={handleInputChange}
-                                                    name="lng"
-                                                    id="lng"
+                                                    onChange={e => handleChangeOption(e, i)}
+                                                    name="name"
+                                                    id={option.name}
                                                 />
                                             </div>
-                                            <div className="col-6">
+                                            <div className="col-5">
                                                 Preço/folha
                                                 <input
-                                                    type="text"
-                                                    value={storeData.options[i].price}
-                                                    onChange={handleInputChange}
-                                                    name="lng"
-                                                    id="lng"
+                                                    type="number"
+                                                    value={storeData.options[i].price === -1 ? "" : storeData.options[i].price}
+                                                    onChange={e => handleChangeOption(e, i)}
+                                                    name="price"
+                                                    id={option.name.concat(' price')}
                                                 />
                                             </div>
-                                            {/*botao para deletar opção*/}
-                                        </div>
+                                            <div className="col-2">
+                                                <button type="button"
+                                                    className="remove-option"
+                                                    onClick={() => handleRemoveOptions(i)}>
+                                                </button>
+                                            </div>
+                                        </div>)
                                         )}
-                                        {/*botao para adicionar nova opção*/}
+                                        <div className="row">
+                                            <button type="button"
+                                                className="add-option"
+                                                onClick={() => handleAddOption()}>
+                                            </button>
+                                        </div>
                                         </div>
                                     </label>
 
@@ -414,9 +480,15 @@ export const Store = () => {
                                         <input
                                             type="checkbox"
                                             value={storeData.isActivated}
-                                            defaultChecked={storeData.isActivated}
+                                            checked={storeData.isActivated}
                                             name="isActivated"
                                             id="isActivated"
+                                            onChange={() => {
+                                                setStoreData({
+                                                    ...storeData,
+                                                    isActivated: !storeData.acceptPicPay
+                                                });
+                                            }}
                                         />
                                     </label>
                                     <br/>
@@ -425,19 +497,19 @@ export const Store = () => {
                                         <input
                                             type="checkbox"
                                             value={storeData.acceptPicPay}
-                                            defaultChecked={storeData.acceptPicPay}
-                                            onChange={() => {
-                                                setData({
-                                                    ...data,
-                                                    acceptPicPay: !data.acceptPicPay
-                                                });
-                                            }}
+                                            checked={storeData.acceptPicPay}
                                             name="acceptPicPay"
                                             id="acceptPicPay"
+                                            onChange={() => {
+                                                setStoreData({
+                                                    ...storeData,
+                                                    acceptPicPay: !storeData.acceptPicPay
+                                                });
+                                            }}
                                         />
                                     </label>
                                     <br/>
-                                    {data.acceptPicPay &&
+                                    {storeData.acceptPicPay &&
                                     <label htmlFor="picPayAccount" className="PicPayAccount-label">
                                         Conta PicPay
                                         <input
@@ -453,7 +525,7 @@ export const Store = () => {
                                         <span className="form-error">{data.errorMessage}</span>
                                     )}
 
-                                    <button disabled={data.isSubmitting}>
+                                    <button disabled={data.isSubmitting} type="submit">
                                         {data.isSubmitting ? (
                                             "Carregando..."
                                         ) : (

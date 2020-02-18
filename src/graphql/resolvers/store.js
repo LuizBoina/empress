@@ -37,6 +37,10 @@ const storeResolver = {
             if(!/[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}\-?[0-9]{2}/g.test(args.storeInput.cnpj))
                 throw new Error('CNPJ inválido');
             args.storeInput.cnpj = args.storeInput.cnpj.replace(/\D/g,'');
+            args.storeInput.options.forEach(option => {
+               if(option.price <= 0)
+                   throw new Error('preco da opçao '+option.name+' nao e valido');
+            });
             const result = await Store.findOneAndUpdate({_id: args.storeId}, args.storeInput,{new: true});
             return {...result._doc, _id: result.id};
         } catch (err) {

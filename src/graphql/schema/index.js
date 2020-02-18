@@ -82,10 +82,10 @@ module.exports = buildSchema(`
     }
     
     input StoreInput {
-        storeAdmin: String!
-        code: Int
+        storeAdmin: ID!
         cnpj: String
         latLng: LatLngInput!
+        options: [OptionInput!]!
         acceptPicPay: Boolean!
         picPayAccount: String
     }
@@ -114,7 +114,7 @@ module.exports = buildSchema(`
         updateUser(userId: ID!, userInput: UserInput): User
         deleteUser(userId: ID!): String
         createStore(storeInput: StoreInput): Store
-        updateStore(userID: ID!, storeInput: StoreInput): Store
+        updateStore(storeId: ID!, storeInput: StoreInput): Store
         deleteStore(storeId: ID!): String
         createPrint(printInput: PrintInput): Print
         deletePrint(printId: ID!): String

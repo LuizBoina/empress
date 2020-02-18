@@ -75,8 +75,8 @@ export const CreateStore = () => {
         if (resUser.data.createUser) {
             const storeRequestBody = {
                 query: `
-                    mutation CreateStore($storeAdmin: String!, $cnpj: String!, $latLng: LatLngInput!, $acceptPicPay: Boolean!, $picPayAccount: String) {
-                        createStore(storeInput: {storeAdmin: $storeAdmin, cnpj: $cnpj, latLng: $latLng, acceptPicPay: $acceptPicPay, picPayAccount: $picPayAccount}) {
+                    mutation CreateStore($storeAdmin: ID!, $cnpj: String!, $latLng: LatLngInput!, $acceptPicPay: Boolean!, $picPayAccount: String, $options: [OptionInput!]!) {
+                        createStore(storeInput: {storeAdmin: $storeAdmin, cnpj: $cnpj, latLng: $latLng, acceptPicPay: $acceptPicPay, picPayAccount: $picPayAccount, options: $options}) {
                             _id
                         }
                     }`,
@@ -86,6 +86,7 @@ export const CreateStore = () => {
                     latLng: {lat: data.lat, lng: data.lng},
                     acceptPicPay: data.acceptPicPay,
                     picPayAccount: data.acceptPicPay ? data.picPayAccount : null,
+                    options: []
                 },
             };
             const resStore = await (await fetch('http://localhost:8000/graphql', {
@@ -95,6 +96,7 @@ export const CreateStore = () => {
                     'Content-Type': 'application/json'
                 }
             })).json();
+            console.log(resStore)
             if (resStore.data.createStore) {
                 setPage('VIEW_STORE');
             } else {
