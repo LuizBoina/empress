@@ -1,0 +1,43 @@
+.store-update {
+    margin-bottom: 1%;
+}
+
+.store-update input {
+    margin-bottom: 1%;
+}
+
+.add-option {
+    background-image: url("../../assets/images/plus.svg");
+    background-color: #ffff;
+    width: 3em;
+    height: 3em;
+	color: inherit;
+	border: none;
+	padding: 0;
+    margin: 0.5em 0 2em 1.2em;
+	/*font: inherit;*/
+	cursor: pointer;
+	/*outline: inherit;*/
+}
+
+.remove-option {
+    background-image: url("../../assets/images/quit.svg");
+    background-color: #ffff;
+    width: 1.5em;
+    height: 1.5em;
+	color: inherit;
+	border: none;
+	padding: 0;
+	/*font: inherit;*/
+	cursor: pointer;
+    margin-top: 2em;
+	/*outline: inherit;*/
+}
+
+.stores-list {
+    text-align: center;
+}
+
+.col-5 h1 {
+    text-align-last: end;
+}

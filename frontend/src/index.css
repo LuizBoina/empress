@@ -1,0 +1,59 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.login-container {
+  display: flex;
+  align-items: center;
+  height: calc(100vh - 70px);
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
+/* Add some padding inside the card container */
+.login-container .container {
+  padding-left: 7%;
+  padding-right: 7%;
+  height: 100%;
+}
+
+.login-container .container label {
+  margin-bottom: 1%;
+}
+
+.login-container .container h1 {
+  font-size: 2.5rem;
+  align-self: center;
+}
+
+.login-container .container form {
+  display: flex;
+  height: 80%;
+  flex-direction: column;
+  justify-content: space-around;
+  align-self: center;
+}
+
+
+.login-container button {
+  height: 40px;
+  font-weight: bold;
+  font-size: 15px;
+  background-color: #3399ff;
+  color: rgb(255, 255, 255);
+}
+
+.login-container button:hover {
+  background-color: #0066cc;
+  cursor: pointer;
+}
+
+.login-container button:focus {
+  outline: none !important;
+}
+
+.form-error {
+  color: #F42B4B;
+  text-align: center;
+}

@@ -1,76 +1,71 @@
-import React from "react";
-import {AuthContext, PageContext} from "../App";
+import React from 'react';
+import { A, navigate } from 'hookrouter';
 
-/*const changePage = useCallback(page =>{
-    const role = JSON.parse(localStorage.getItem('role') || null);
-    if(role === 'admin') {
-        if (page === 'prints' || page === 'fPrints' || page === 'info')
-            console.log("can't do this with current role");
-        else {
-            for (let key in newPageContext)
-                newPageContext[key] = key === page;
-        }
-    }
-    else if(role === 'employee') {
-        if(page === 'prints' || page === 'fPrints' || page === 'info') {
-            for (let key in newPageContext)
-                newPageContext[key] = key === page;
-        }
-        else
-            console.log("can't do this with current role");
-    }
-    else
-        console.log('this role is not allowed here');
-},[newPageContext]);*/
-export const Header = () => {
-    const {state, dispatch} = React.useContext(AuthContext);
-    const {page, setPage} = React.useContext(PageContext);
-    return (
-        <PageContext.Provider value={{page, setPage}}>
-            <nav id="navigation">
-                <h1 className="logo">
-                    Empress
-                </h1>
-                {state.isAuthenticated && state.role === "admin" &&
-                <div>
-                    <button
-                        onClick={() => setPage('ADD_STORE')}>
-                        <h1 className="logo">Criar nova loja</h1>
-                    </button>
-                    <button
-                        onClick={() => setPage('VIEW_STORE')}>
-                        <h1 className="logo">Ver lojas</h1>
-                    </button>
-                </div>
-                }
-                {state.isAuthenticated && state.role === "employee" &&
-                <div>
-                    <button
-                        onClick={() => setPage('PRINTS')}>
-                        <h1 className="logo">Impressões pendentes</h1>
-                    </button>
-                    <button
-                        onClick={() => setPage('F_PRINTS')}>
-                        <h1 className="logo">Impressões feitas</h1>
-                    </button>
-                    <button
-                        onClick={() => setPage('INFO')}>
-                        <h1 className="logo">Estatísticas</h1>
-                    </button>
-                </div>
-                }
-                <button
-                    onClick={() =>
-                        dispatch({
-                            type: "LOGOUT"
-                        })}>
-                    {state.isAuthenticated && (
-                        <h1>Hi {state.role} (LOGOUT)</h1>
-                    )}
-                </button>
-            </nav>
-        </PageContext.Provider>
-    );
+import './header.css';
+import AuthContext from '../index';
+
+const Header = () => {
+	const { state, dispatch } = React.useContext(AuthContext);
+	const handleHeaderRole = {
+		'admin': [
+			{
+				'route': '/create-store',
+				'text': 'Criar nova loja'
+			},
+			{
+				'route': '/store',
+				'text': 'Ver lojas'
+			}
+		],
+		'employee': [
+			{
+				'route': '/prints',
+				'text': 'Impressões pendentes'
+			},
+			{
+				'route': '/finished-prints',
+				'text': 'Impressões feitas'
+			},
+			{
+				'route': '/info',
+				'text': 'Estatísticas'
+			}
+		]
+	};
+	const header = handleHeaderRole[state.role];
+
+	const handleLogout = () => {
+		dispatch({
+			type: "LOGOUT"
+		});
+		navigate('/auth');
+	};
+
+	return (
+		<header>
+			<div className='logo'>
+				<h1>Empress</h1>
+			</div>
+			{
+				state.role &&
+				<>
+					<div className='routes'>
+						{
+							header.map((tab, i) => (
+								<A key={i} href={tab.route}>{tab.text}</A>
+							))
+						}
+					</div>
+					<div className='logout'>
+						<button
+							onClick={handleLogout}>
+								<h1>Logout</h1>
+						</button>
+					</div>
+				</>
+			}
+		</header>
+	);
 };
 
 export default Header;

@@ -11,19 +11,19 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - ./data/db:/data/db
+      - .backend/data/db:/data/db
     env_file: .env
     command: mongod --bind_ip 127.0.0.1,172.18.0.2
     #add bind_ip = <ip> in "/data/config/mongod.conf" to accept connections
   backend:
-    build: .
+    build: ./backend
     environment:
       NODE_ENV: development
     restart: unless-stopped
     ports:
       - "8000:8000"
     volumes:
-      - .:/usr/src/app
+      - ./backend:/usr/src/app
       - /usr/src/app/node_modules
     depends_on:
       - "mongo"

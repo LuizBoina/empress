@@ -1,9 +1,9 @@
 import React from "react";
-import {/*AuthContext,*/ PageContext} from "../App";
+import { navigate } from "hookrouter";
+
+import './createStore.css';
 
 export const CreateStore = () => {
-    //const {dispatch} = React.useContext(AuthContext);
-    const {setPage} = React.useContext(PageContext);
     const initialState = {
         email: "",
         name: "",
@@ -98,7 +98,7 @@ export const CreateStore = () => {
             })).json();
             console.log(resStore)
             if (resStore.data.createStore) {
-                setPage('VIEW_STORE');
+                navigate('/stores');
             } else {
                 const userDeleteRequestBody = {
                     query: `
