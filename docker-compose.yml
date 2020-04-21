@@ -12,7 +12,7 @@ services:
       - "27017:27017"
     volumes:
       - .backend/data/db:/data/db
-    env_file: .env
+    env_file: ./backend/.env
     command: mongod --bind_ip 127.0.0.1,172.18.0.2
     #add bind_ip = <ip> in "/data/config/mongod.conf" to accept connections
   backend:
@@ -40,6 +40,7 @@ services:
       - ./frontend/node_modules:/usr/src/app/node_modules
     depends_on:
       - "backend"
+    # tty: true
     command: yarn start
   #maybe removed in prod
   mongo-express:
@@ -58,4 +59,4 @@ services:
       - mongo
     depends_on:
       - mongo
-    env_file: .env
+    env_file: ./backend/.env

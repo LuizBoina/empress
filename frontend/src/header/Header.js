@@ -13,7 +13,7 @@ const Header = () => {
 				'text': 'Criar nova loja'
 			},
 			{
-				'route': '/store',
+				'route': '/stores',
 				'text': 'Ver lojas'
 			}
 		],
